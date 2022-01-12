@@ -1,40 +1,41 @@
 from functools import cache, lru_cache
 from timeit import Timer
+from typing import Any, Callable
 
 
-# Recursive fibo without cache
-def recur_fibo_no_cache(n):
+def recur_fibo_no_cache(n: int) -> int:
+    """Recursive fibo without cache"""
     if n <= 1:
         return n
     else:
         return recur_fibo_no_cache(n - 1) + recur_fibo_no_cache(n - 2)
 
 
-# Recursive fibo with cache (using functools cache decorator)
 @cache
-def recur_fibo_cache(n):
+def recur_fibo_cache(n: int) -> int:
+    """Recursive fibo with cache (using functools cache decorator)"""
     if n <= 1:
         return n
     else:
         return recur_fibo_cache(n - 1) + recur_fibo_cache(n - 2)
 
 
-# Recursive fibo with lru cache (using functools lru_cache decorator)
 @lru_cache(maxsize=5)
-def recur_fibo_lru_cache(n):
+def recur_fibo_lru_cache(n: int) -> int:
+    """Recursive fibo with lru cache (using functools lru_cache decorator)"""
     if n <= 1:
         return n
     else:
         return recur_fibo_lru_cache(n - 1) + recur_fibo_lru_cache(n - 2)
 
 
-def exec_and_clear(f, arg):
+def exec_and_clear(f: Callable[[int], int], arg: Any) -> int:
     a = f(arg)
-    f.cache_clear()
+    f.cache_clear()  # type: ignore
     return a
 
 
-def measure_plot(number, inputs):
+def measure_plot(number: int, inputs: list[int]) -> tuple[list[float], list[float]]:
     no_cache_times = []
     for n in inputs:
         no_cache_timer = Timer(lambda: recur_fibo_no_cache(n))
